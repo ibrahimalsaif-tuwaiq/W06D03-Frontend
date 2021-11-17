@@ -1,11 +1,21 @@
-import React, { Component } from 'react'
+import React from "react";
+import { Route, Routes } from "react-router-dom";
+import Todos from "./components/Todos";
+import Signup from "./components/Signup";
+import Login from "./components/Login";
+import "./App.css";
 
-export default class App extends Component {
-  render() {
-    return (
-      <div>
-        <h1>your clean react code</h1>
-      </div>
-    )
-  }
-}
+const App = () => {
+  return (
+    <>
+      <Routes>
+        <Route exact path="/" element={<Todos />} />
+        <Route exact path="/todos" element={<Todos />} />
+        <Route exact path="/login" element={<Login />} />
+        <Route exact path="/signup" element={<Signup />} />
+      </Routes>
+    </>
+  );
+};
+
+export default App;

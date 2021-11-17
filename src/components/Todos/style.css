@@ -1,0 +1,28 @@
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap");
+
+.todosWrapper {
+  height: 100vh;
+  width: 100%;
+  background: rgb(49, 132, 177);
+  background: linear-gradient(
+    117deg,
+    rgba(49, 132, 177, 1) 19%,
+    rgba(163, 222, 255, 1) 93%,
+    rgba(209, 239, 255, 1) 100%
+  );
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.todosCon {
+  height: 60%;
+  width: 30%;
+  border-radius: 1.75rem;
+  background-color: #d1efff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  border: 0.5rem black solid;
+}
