@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Todo from "./../Todo";
 import "./style.css";
 
 const Todos = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [todos, setTodos] = useState([]);
+  const [todo, setTodo] = useState("");
 
   useEffect(() => {
     const userStorage = localStorage.getItem("user");
@@ -18,7 +20,7 @@ const Todos = () => {
   useEffect(() => {
     getTodos();
     // eslint-disable-next-line
-  }, []);
+  }, [todos]);
 
   const getTodos = async () => {
     const userStorage = localStorage.getItem("user");
@@ -29,13 +31,31 @@ const Todos = () => {
     setTodos(res.data);
   };
 
-  const addTodos = async () => {
+  const addTodo = async () => {
     const userStorage = localStorage.getItem("user");
     const userData = JSON.parse(userStorage);
-    const res = await axios.post("http://localhost:5000/todo/getAll", {
+    await axios.post("http://localhost:5000/todo/add", {
       username: userData.username,
+      todo: todo,
     });
-    setTodos(res.data);
+  };
+
+  const updateTodo = async (id) => {
+    const userStorage = localStorage.getItem("user");
+    const userData = JSON.parse(userStorage);
+    const updatedTodo = prompt('Enter the new todo')
+    await axios.put(`http://localhost:5000/todo/update/${id}`, {
+      username: userData.username,
+      todo: updatedTodo
+    });
+  };
+
+  const deleteTodo = async (id) => {
+    const userStorage = localStorage.getItem("user");
+    const userData = JSON.parse(userStorage);
+    await axios.put(`http://localhost:5000/todo/delete/${id}`, {
+      username: userData.username
+    });
   };
 
   return (
@@ -45,13 +65,19 @@ const Todos = () => {
       ) : (
         <div className="todosCon">
           <div>
-            <input placeholder="Add a new todo" />
-            <button>ADD</button>
+            <input
+              className="addInput"
+              onChange={(e) => setTodo(e.target.value)}
+              placeholder="Add a new todo"
+            />
+            <button className="add" onClick={addTodo}>
+              ADD
+            </button>
           </div>
           {todos ? (
-            <ul>
+            <ul className="list">
               {todos.map((todo) => (
-                <li>{todo}</li>
+                <Todo todo={todo} key={todo.id} deleteTodo={deleteTodo} updateTodo={updateTodo}/>
               ))}
             </ul>
           ) : (

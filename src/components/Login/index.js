@@ -64,6 +64,7 @@ const Login = () => {
             className="submitButton"
             onClick={login}
           />
+          <Link to="/signup">if you don't have an account, register now</Link>
         </div>
       )}
     </div>
