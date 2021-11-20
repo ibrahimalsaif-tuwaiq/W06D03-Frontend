@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import Todo from "./../Todo";
 import "./style.css";
 
 const Todos = () => {
-  const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [todos, setTodos] = useState([]);
   const [todo, setTodo] = useState("");
@@ -25,10 +24,12 @@ const Todos = () => {
   const getTodos = async () => {
     const userStorage = localStorage.getItem("user");
     const userData = JSON.parse(userStorage);
-    const res = await axios.post("http://localhost:5000/todo/getAll", {
-      username: userData.username,
-    });
-    setTodos(res.data);
+    if (userData) {
+      const res = await axios.post("http://localhost:5000/todo/getAll", {
+        username: userData.username,
+      });
+      setTodos(res.data);
+    }
   };
 
   const addTodo = async () => {
@@ -43,10 +44,10 @@ const Todos = () => {
   const updateTodo = async (id) => {
     const userStorage = localStorage.getItem("user");
     const userData = JSON.parse(userStorage);
-    const updatedTodo = prompt('Enter the new todo')
+    const updatedTodo = prompt("Enter the new todo");
     await axios.put(`http://localhost:5000/todo/update/${id}`, {
       username: userData.username,
-      todo: updatedTodo
+      todo: updatedTodo,
     });
   };
 
@@ -54,14 +55,14 @@ const Todos = () => {
     const userStorage = localStorage.getItem("user");
     const userData = JSON.parse(userStorage);
     await axios.put(`http://localhost:5000/todo/delete/${id}`, {
-      username: userData.username
+      username: userData.username,
     });
   };
 
   return (
     <div className="todosWrapper">
       {!user ? (
-        navigate("/login")
+        <h1>You are not logeddin yet, so <Link to='/login'>login</Link> or <Link to='/signup'>signup</Link></h1>
       ) : (
         <div className="todosCon">
           <div>
@@ -77,7 +78,12 @@ const Todos = () => {
           {todos ? (
             <ul className="list">
               {todos.map((todo) => (
-                <Todo todo={todo} key={todo.id} deleteTodo={deleteTodo} updateTodo={updateTodo}/>
+                <Todo
+                  todo={todo}
+                  key={todo.id}
+                  deleteTodo={deleteTodo}
+                  updateTodo={updateTodo}
+                />
               ))}
             </ul>
           ) : (
